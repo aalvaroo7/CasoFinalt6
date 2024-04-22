@@ -1,6 +1,7 @@
 package Analisis_y_gestion_info;
 
 import Gestio_datos_dinamicos.Modelo_multidimensional;
+import Gestio_datos_dinamicos.Pareja;
 
 import java.util.TreeSet;
 
@@ -13,14 +14,12 @@ public class ModeloMultidimensionalOrdenado extends Modelo_multidimensional {
         conjuntoReales = new TreeSet<>();
     }
 
-    @Override
-    public void agregarParejaEnteros(Pareja<Integer, Integer> pareja) {
-        conjuntoEnteros.add(new ParejaOrdenada<>(pareja.getFirst(), pareja.getSecond()));
+    public void agregarParejaEnteros(ParejaOrdenada<Integer, Integer> pareja) {
+        conjuntoEnteros.add(pareja);
     }
 
-    @Override
-    public void agregarParejaReales(Pareja<Double, Double> pareja) {
-        conjuntoReales.add(new ParejaOrdenada<>(pareja.getFirst(), pareja.getSecond()));
+    public void agregarParejaReales(ParejaOrdenada<Double, Double> pareja) {
+        conjuntoReales.add(pareja);
     }
 
     @Override
