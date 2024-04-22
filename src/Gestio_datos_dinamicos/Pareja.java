@@ -2,7 +2,7 @@ package Gestio_datos_dinamicos;
 
 import java.util.Objects;
 
-public class Pareja<T, U> {
+public class Pareja<T extends Comparable<T>, U extends Comparable<U>> implements Comparable<Pareja<T, U>> {
     private T first;
     private U second;
 
@@ -55,5 +55,15 @@ public class Pareja<T, U> {
     @Override
     public int hashCode() {
         return Objects.hash(first, second);
+    }
+
+    @Override
+    public int compareTo(Pareja<T, U> otraPareja) {
+        int comparacionPrimerElemento = this.first.compareTo(otraPareja.first);
+        if (comparacionPrimerElemento != 0) {
+            return comparacionPrimerElemento;
+        } else {
+            return this.second.compareTo(otraPareja.second);
+        }
     }
 }
