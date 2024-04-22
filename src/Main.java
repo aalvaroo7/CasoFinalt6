@@ -18,9 +18,8 @@ public class Main {
 
         // Imprimir las listas del modelo
         modelo.imprimirListas();
-    }
 
-    public static void main(String[] args) {
         // Crear una instancia de la interfaz de usuario
         new InterfazUsuario();
+    }
 }
