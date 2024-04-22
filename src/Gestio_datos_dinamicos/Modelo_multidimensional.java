@@ -24,7 +24,6 @@ public class Modelo_multidimensional {
         System.out.println("Lista de pares de enteros: " + listaEnteros);
         System.out.println("Lista de pares de datos reales: " + listaReales);
     }
-    // En la clase Modelo_multidimensional
     public boolean buscarDato(Pareja<Integer, Integer> dato) {
         return listaEnteros.contains(dato) || listaReales.contains(dato);
     }
