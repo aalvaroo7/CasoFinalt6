@@ -1,3 +1,5 @@
+package Gestio_datos_dinamicos;
+
 import java.util.Objects;
 
 public class Pareja<T, U> {
@@ -36,7 +38,7 @@ public class Pareja<T, U> {
 
     @Override
     public String toString() {
-        return "Pareja{" +
+        return "Gestio_datos_dinamicos.Pareja{" +
                 "first=" + first +
                 ", second=" + second +
                 '}';
