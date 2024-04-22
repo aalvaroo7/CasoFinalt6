@@ -1,3 +1,4 @@
+import Gestio_datos_dinamicos.InterfazUsuario;
 import Gestio_datos_dinamicos.Pareja;
 import Gestio_datos_dinamicos.Modelo_multidimensional;
 
@@ -18,4 +19,8 @@ public class Main {
         // Imprimir las listas del modelo
         modelo.imprimirListas();
     }
+
+    public static void main(String[] args) {
+        // Crear una instancia de la interfaz de usuario
+        new InterfazUsuario();
 }
