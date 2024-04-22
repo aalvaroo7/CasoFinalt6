@@ -85,15 +85,4 @@ public class InterfazUsuario extends JFrame {
             areaTexto.append(dato + "\n");
         }
     }
-    // En la clase InterfazUsuario
-botonEliminar.addActionListener(e -> {
-        // Eliminar el último elemento de la lista
-        if (!listaDatos.isEmpty()) {
-            listaDatos.remove(listaDatos.size() - 1);
-
-            // Actualizar el área de texto
-            actualizarAreaTexto();
-        }
-    });
-
 }
