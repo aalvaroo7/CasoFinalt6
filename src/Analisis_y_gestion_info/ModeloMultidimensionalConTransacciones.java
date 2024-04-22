@@ -34,4 +34,11 @@ public class ModeloMultidimensionalConTransacciones extends Modelo_multidimensio
     }
 
     // You can add more filtering methods as needed...
+
+    // En la clase ModeloMultidimensionalConTransacciones
+    public TreeSet<Transaccion> filtrarTransaccionesPorPrecio(double precio) {
+        return transacciones.stream()
+                .filter(transaccion -> transaccion.getPrecio() >= precio)
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
 }
