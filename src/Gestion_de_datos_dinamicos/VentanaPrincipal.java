@@ -215,8 +215,7 @@ public class VentanaPrincipal extends JFrame {
 
         // Crear la tabla de transacciones
         String[] columnas = {"ID", "Monto", "Fecha", "Cliente"};
-        tablaTransacciones = new JTable(new TransaccionesTableModel(listaTransacciones.getTransacciones()), columnas);
-
+        tablaTransacciones = new JTable(new TransaccionesTableModel(listaTransacciones.getTransacciones()));
         // Crear el panel de la tabla
         JScrollPane scrollPane = new JScrollPane(tablaTransacciones);
         JPanel panelTabla = new JPanel();
