@@ -3,6 +3,7 @@ package Mapas_y_asociacion_datos;
 import analisis_y_organizacion_informacion.Transaccion;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Create a Repository Class
 public class TransaccionRepositorio {

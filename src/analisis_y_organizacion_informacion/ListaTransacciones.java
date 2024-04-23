@@ -80,4 +80,13 @@ public class ListaTransacciones {
         }
         return filtradas;
     }
+    public List<Transaccion> recuperarInformacion(String criterio) {
+        List<Transaccion> result = new ArrayList<>();
+        for (Transaccion transaccion : this.transacciones) {
+            if (transaccion.getCliente().contains(criterio)) {
+                result.add(transaccion);
+            }
+        }
+        return result;
+    }
 }

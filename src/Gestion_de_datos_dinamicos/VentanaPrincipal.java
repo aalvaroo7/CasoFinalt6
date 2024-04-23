@@ -1,9 +1,9 @@
 package Gestion_de_datos_dinamicos;
 
+import Indexacion_y_Visualizacion_datos.IndexadorArchivos;
 import analisis_y_organizacion_informacion.ListaTransacciones;
 import analisis_y_organizacion_informacion.Transaccion;
 import analisis_y_organizacion_informacion.TransaccionesTableModel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,6 +17,8 @@ public class VentanaPrincipal extends JFrame {
     private JTextField campoMonto;
     private JTextField campoFecha;
     private JTextField campoCliente;
+    private JButton botonRecuperarInformacion; // Mueve la declaración aquí
+    private IndexadorArchivos indexadorArchivos; // Agrega esta línea
 
     public VentanaPrincipal() {
         super("Lista de Transacciones");
@@ -25,6 +27,9 @@ public class VentanaPrincipal extends JFrame {
 
         // Crear la lista de transacciones
         listaTransacciones = new ListaTransacciones();
+
+        // Instancia IndexadorArchivos
+        indexadorArchivos = new IndexadorArchivos(); // Agrega esta línea
 
         // Crear el panel de entrada de datos
         JPanel panelEntrada = new JPanel();
@@ -98,120 +103,38 @@ public class VentanaPrincipal extends JFrame {
         });
         panelEntrada.add(botonModificar);
 
-        // Crear el botón de eliminar transacción
-        JButton botonEliminar = new JButton("Eliminar transacción");
-        botonEliminar.addActionListener(new ActionListener() {
-            @Override
+        // Crear el botón de recuperar información basada en claves o criterios definidos por el usuario
+        botonRecuperarInformacion = new JButton("Recuperar Información");
+        botonRecuperarInformacion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int indiceSeleccionado = tablaTransacciones.getSelectedRow();
-                if (indiceSeleccionado >= 0) {
-                    listaTransacciones.eliminarTransaccion(indiceSeleccionado);
-                    tablaTransacciones.updateUI();
-                } else {
-                    JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, seleccione una transacción.", "Seleccione una transacción", JOptionPane.WARNING_MESSAGE);
+                String criterio = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el criterio de búsqueda:", "Recuperar Información", JOptionPane.QUESTION_MESSAGE);
+                if (criterio != null && !criterio.isEmpty()) {
+                    // Lógica para recuperar información basada en el criterio definido por el usuario
+                    List<Transaccion> recuperadas = listaTransacciones.recuperarInformacion(criterio);
+                    tablaTransacciones.setModel(new TransaccionesTableModel(recuperadas));
                 }
             }
         });
-        panelEntrada.add(botonEliminar);
+        panelEntrada.add(botonRecuperarInformacion);
 
-        // Crear el botón de ordenar por monto
-        JButton botonOrdenarPorMonto = new JButton("Ordenar por monto");
-        botonOrdenarPorMonto.addActionListener(new ActionListener() {
+        // Crear el botón de indexar archivos
+        JButton botonIndexarArchivos = new JButton("Indexar Archivos");
+        botonIndexarArchivos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listaTransacciones.ordenarPorMonto();
-                tablaTransacciones.updateUI();
-            }
-        });
-        panelEntrada.add(botonOrdenarPorMonto);
+                String directory = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el directorio a indexar:", "Indexar Archivos", JOptionPane.QUESTION_MESSAGE);
+                if (directory != null && !directory.isEmpty()) {
+                    indexadorArchivos.index(directory);
+                    List<String> fileNames = indexadorArchivos.getFileNames();
+                    List<String> filePaths = indexadorArchivos.getFilePaths();
 
-        // Crear el botón de ordenar por fecha
-        JButton botonOrdenarPorFecha = new JButton("Ordenar por fecha");
-        botonOrdenarPorFecha.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listaTransacciones.ordenarPorFecha();
-                tablaTransacciones.updateUI();
-            }
-        });
-        panelEntrada.add(botonOrdenarPorFecha);
-
-        // Crear el botón de filtrar por cliente
-        JButton botonFiltrarPorCliente = new JButton("Filtrar por cliente");
-        botonFiltrarPorCliente.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String cliente = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el nombre del cliente:", "Filtrar por cliente", JOptionPane.QUESTION_MESSAGE);
-                if (cliente != null && !cliente.isEmpty()) {
-                    List<Transaccion> filtradas = listaTransacciones.filtrarPorCliente(cliente);
-                    tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
+                    // Aquí puedes usar las listas fileNames y filePaths como necesites
+                    // Por ejemplo, podrías mostrarlas en un JOptionPane
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this, "Archivos indexados:\n" + fileNames.toString(), "Archivos Indexados", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
-        panelEntrada.add(botonFiltrarPorCliente);
-
-        // Crear el botón de filtrar por rango de fechas
-        JButton botonFiltrarPorRangoDeFechas = new JButton("Filtrar por rango de fechas");
-        botonFiltrarPorRangoDeFechas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String fechaInicial = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese la fecha inicial (yyyy-mm-dd):", "Filtrar por rango de fechas", JOptionPane.QUESTION_MESSAGE);
-                String fechaFinal = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese la fecha final (yyyy-mm-dd):", "Filtrar por rango de fechas", JOptionPane.QUESTION_MESSAGE);
-                if (fechaInicial != null && !fechaInicial.isEmpty() && fechaFinal != null && !fechaFinal.isEmpty()) {
-                    List<Transaccion> filtradas = listaTransacciones.filtrarPorRangoDeFechas(fechaInicial, fechaFinal);
-                    tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
-                }
-            }
-        });
-        panelEntrada.add(botonFiltrarPorRangoDeFechas);
-
-        // Crear el botón de filtrar por monto mínimo
-        JButton botonFiltrarPorMontoMinimo = new JButton("Filtrar por monto mínimo");
-        botonFiltrarPorMontoMinimo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String montoMinimoStr = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el monto mínimo:", "Filtrar por monto mínimo", JOptionPane.QUESTION_MESSAGE);
-                if (montoMinimoStr != null && !montoMinimoStr.isEmpty()) {
-                    try {
-                        double montoMinimo = Double.parseDouble(montoMinimoStr);
-                        List<Transaccion> filtradas = listaTransacciones.filtrarPorMontoMinimo(montoMinimo);
-                        tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, ingrese un valor numérico válido para el monto mínimo.", "Error de entrada", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        });
-        panelEntrada.add(botonFiltrarPorMontoMinimo);
-
-        // Crear el botón de filtrar por monto máximo
-        JButton botonFiltrarPorMontoMaximo = new JButton("Filtrar por monto máximo");
-        botonFiltrarPorMontoMaximo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String montoMaximoStr = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el monto máximo:", "Filtrar por monto máximo", JOptionPane.QUESTION_MESSAGE);
-                if (montoMaximoStr != null && !montoMaximoStr.isEmpty()) {
-                    try {
-                        double montoMaximo = Double.parseDouble(montoMaximoStr);
-                        List<Transaccion> filtradas = listaTransacciones.filtrarPorMontoMaximo(montoMaximo);
-                        tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, ingrese un valor numérico válido para el monto máximo.", "Error de entrada", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        });
-        panelEntrada.add(botonFiltrarPorMontoMaximo);
-
-        // Crear el botón de limpiar filtros
-        JButton botonLimpiarFiltros = new JButton("Limpiar filtros");
-        botonLimpiarFiltros.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tablaTransacciones.setModel(new TransaccionesTableModel(listaTransacciones.getTransacciones()));
-            }
-        });
-        panelEntrada.add(botonLimpiarFiltros);
+        panelEntrada.add(botonIndexarArchivos);
 
         // Crear la tabla de transacciones
         String[] columnas = {"ID", "Monto", "Fecha", "Cliente"};
@@ -234,19 +157,7 @@ public class VentanaPrincipal extends JFrame {
         setVisible(true);
     }
 
-    // Crear el botón de recuperar información basada en claves o criterios definidos por el usuario
-    JButton botonRecuperarInformacion = new JButton("Recuperar Información");
-botonRecuperarInformacion.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-            String criterio = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el criterio de búsqueda:", "Recuperar Información", JOptionPane.QUESTION_MESSAGE);
-            if (criterio != null && !criterio.isEmpty()) {
-                // Lógica para recuperar información basada en el criterio definido por el usuario
-                List<Transaccion> recuperadas = listaTransacciones.recuperarInformacion(criterio);
-                tablaTransacciones.setModel(new TransaccionesTableModel(recuperadas));
-            }
-        }
-    }
-panelEntrada.add(botonRecuperarInformacion);
+    // Método main
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
