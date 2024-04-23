@@ -37,6 +37,9 @@ public class InterfazUsuario extends JFrame {
     // Crear una instancia de la gestión de relaciones
     private GestionRelaciones relaciones = new GestionRelaciones();
 
+    // Crear una instancia de la recuperación eficiente
+    private RecuperacionEficiente<Integer, String> recuperacionEficiente = new RecuperacionEficiente<>();
+
     public InterfazUsuario() {
         // Configurar el layout
         setLayout(new FlowLayout());
