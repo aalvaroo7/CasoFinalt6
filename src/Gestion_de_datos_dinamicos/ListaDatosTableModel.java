@@ -2,7 +2,7 @@ package Gestion_de_datos_dinamicos;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
-import
+
 import Gestion_de_datos_dinamicos.ListaDatos;
 public class ListaDatosTableModel extends AbstractTableModel {
     private List<Pareja> datos;

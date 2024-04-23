@@ -1,65 +1,72 @@
 package Gestion_de_datos_dinamicos;
+
+import Gestion_de_datos_dinamicos.ListaDatos;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class VentanaPrincipal extends JFrame {
     private ListaDatos listaDatos;
     private JTable tablaDatos;
+    private JTextField campoPrimerNumero;
+    private JTextField campoSegundoNumero;
 
     public VentanaPrincipal() {
-        super("Ventana Principal");
-        setLayout(new BorderLayout());
+        super("Lista de Datos");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(600, 400);
 
         // Crear la lista de datos
         listaDatos = new ListaDatos();
 
-        // Crear la tabla de datos
-        tablaDatos = new JTable(new ListaDatosTableModel(listaDatos));
-        JScrollPane scrollPane = new JScrollPane(tablaDatos);
-        add(scrollPane, BorderLayout.CENTER);
+        // Crear el panel de entrada de datos
+        JPanel panelEntrada = new JPanel();
+        panelEntrada.setLayout(new GridLayout(2, 2));
+        panelEntrada.add(new JLabel("Primer número:"));
+        campoPrimerNumero = new JTextField(5);
+        panelEntrada.add(campoPrimerNumero);
+        panelEntrada.add(new JLabel("Segundo número:"));
+        campoSegundoNumero = new JTextField(5);
+        panelEntrada.add(campoSegundoNumero);
 
-        // Crear los botones
-        JButton botonAgregar = new JButton("Agregar");
-        JButton botonEliminar = new JButton("Eliminar");
-        JButton botonModificar = new JButton("Modificar");
-
-        // Agregar acciones a los botones
+        // Crear el botón de agregar datos
+        JButton botonAgregar = new JButton("Agregar datos");
         botonAgregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Acción para agregar datos
+                try {
+                    int primerNumero = Integer.parseInt(campoPrimerNumero.getText());
+                    int segundoNumero = Integer.parseInt(campoSegundoNumero.getText());
+                    Pareja nuevaPareja = new Pareja(primerNumero, segundoNumero);
+                    listaDatos.agregarPareja(nuevaPareja);
+                    tablaDatos.updateUI();
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                            "Por favor, ingrese números válidos.",
+                            "Error de entrada",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
+        panelEntrada.add(botonAgregar);
 
-        botonEliminar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Acción para eliminar datos
-            }
-        });
+        // Crear el modelo de datos de la tabla
+        ListaDatosTableModel modeloTabla = new ListaDatosTableModel(listaDatos);
 
-        botonModificar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Acción para modificar datos
-            }
-        });
+        // Crear la tabla
+        tablaDatos = new JTable(modeloTabla);
 
-        // Crear el panel de botones
-        JPanel panelBotones = new JPanel();
-        panelBotones.add(botonAgregar);
-        panelBotones.add(botonEliminar);
-        panelBotones.add(botonModificar);
+        // Crear el panel de la tabla
+        JScrollPane panelTabla = new JScrollPane(tablaDatos);
 
-        // Agregar el panel de botones a la ventana
-        add(panelBotones, BorderLayout.SOUTH);
+        // Agregar los paneles al marco
+        getContentPane().add(panelEntrada, BorderLayout.NORTH);
+        getContentPane().add(panelTabla, BorderLayout.CENTER);
 
-        // Configurar la ventana
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
+        // Mostrar la ventana
         setVisible(true);
     }
 }
