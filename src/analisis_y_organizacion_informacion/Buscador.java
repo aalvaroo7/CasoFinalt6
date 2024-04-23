@@ -1,5 +1,9 @@
 package analisis_y_organizacion_informacion;
 
+import Gestion_de_datos_dinamicos.Pareja;
+
+import java.util.List;
+
 public class Buscador {
 
     public static int buscarPareja(List<Pareja> datos, int primerNumero, int segundoNumero) {
