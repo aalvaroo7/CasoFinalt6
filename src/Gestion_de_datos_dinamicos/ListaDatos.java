@@ -1,5 +1,7 @@
 package Gestion_de_datos_dinamicos;
 
+import Gestion_de_datos_dinamicos.Pareja;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,18 +13,22 @@ public class ListaDatos {
     }
 
     public void agregarPareja(Pareja pareja) {
-        datos.add(pareja);
+        this.datos.add(pareja);
     }
 
     public void eliminarPareja(int indice) {
-        datos.remove(indice);
+        this.datos.remove(indice);
     }
 
-    public void modificarPareja(int indice, Pareja nuevaPareja) {
-        datos.set(indice, nuevaPareja);
+    public Pareja getPareja(int indice) {
+        return this.datos.get(indice);
     }
 
     public List<Pareja> getDatos() {
-        return datos;
+        return this.datos;
+    }
+
+    public int size() {
+        return this.datos.size();
     }
 }
