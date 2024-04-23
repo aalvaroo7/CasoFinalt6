@@ -1,13 +1,12 @@
 package Gestion_de_datos_dinamicos;
-import Gestion_de_datos_dinamicos.Pareja;
-import Gestion_de_datos_dinamicos.ListaDatos;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
+import java.util.ArrayList;
+import java.util.Collections;
 public class VentanaPrincipal extends JFrame {
     private ListaDatos listaDatos;
     private JTable tablaDatos;
@@ -106,6 +105,55 @@ public class VentanaPrincipal extends JFrame {
         });
         panelEntrada.add(botonEliminar);
 
+        // Crear el botón de ordenar por primer número
+        JButton botonOrdenarPorPrimerNumero = new JButton("Ordenar por primer número");
+        botonOrdenarPorPrimerNumero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listaDatos.ordenarPorPrimerNumero();
+                tablaDatos.updateUI();
+            }
+        });
+        panelEntrada.add(botonOrdenarPorPrimerNumero);
+
+        // Crear el botón de ordenar por segundo número
+        JButton botonOrdenarPorSegundoNumero = new JButton("Ordenar por segundo número");
+        botonOrdenarPorSegundoNumero.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listaDatos.ordenarPorSegundoNumero();
+                tablaDatos.updateUI();
+            }
+        });
+        panelEntrada.add(botonOrdenarPorSegundoNumero);
+
+        // Crear el botón de buscar pareja
+        JButton botonBuscarPareja = new JButton("Buscar pareja");
+        botonBuscarPareja.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    int primerNumero = Integer.parseInt(campoPrimerNumero.getText());
+                    int segundoNumero = Integer.parseInt(campoSegundoNumero.getText());
+                    int indice = listaDatos.buscarPareja(primerNumero, segundoNumero);
+                    if (indice >= 0) {
+                        tablaDatos.setRowSelectionInterval(indice, indice);
+                    } else {
+                        JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                                "No se encontró la pareja de datos.",
+                                "Búsqueda fallida",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                            "Por favor, ingrese números válidos.",
+                            "Error de entrada",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        panelEntrada.add(botonBuscarPareja);
+
         // Crear el modelo de datos de la tabla
         ListaDatosTableModel modeloTabla = new ListaDatosTableModel(listaDatos);
 
@@ -121,5 +169,14 @@ public class VentanaPrincipal extends JFrame {
 
         // Mostrar la ventana
         setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new VentanaPrincipal();
+            }
+        });
     }
 }

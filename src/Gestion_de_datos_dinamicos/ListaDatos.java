@@ -1,6 +1,6 @@
-package Gestion_de_datos_dinamicos;
-
 import Gestion_de_datos_dinamicos.Pareja;
+import analisis_y_organizacion_informacion.Buscador;
+import analisis_y_organizacion_informacion.Ordenador;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,4 +31,17 @@ public class ListaDatos {
     public int size() {
         return this.datos.size();
     }
+
+    public void ordenarPorPrimerNumero() {
+        Ordenador.ordenarPorPrimerNumero(this.datos);
+    }
+
+    public void ordenarPorSegundoNumero() {
+        Ordenador.ordenarPorSegundoNumero(this.datos);
+    }
+
+    public int buscarPareja(int primerNumero, int segundoNumero) {
+        return Buscador.buscarPareja(this.datos, primerNumero, segundoNumero);
+    }
+
 }
