@@ -234,6 +234,19 @@ public class VentanaPrincipal extends JFrame {
         setVisible(true);
     }
 
+    // Crear el botón de recuperar información basada en claves o criterios definidos por el usuario
+    JButton botonRecuperarInformacion = new JButton("Recuperar Información");
+botonRecuperarInformacion.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            String criterio = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el criterio de búsqueda:", "Recuperar Información", JOptionPane.QUESTION_MESSAGE);
+            if (criterio != null && !criterio.isEmpty()) {
+                // Lógica para recuperar información basada en el criterio definido por el usuario
+                List<Transaccion> recuperadas = listaTransacciones.recuperarInformacion(criterio);
+                tablaTransacciones.setModel(new TransaccionesTableModel(recuperadas));
+            }
+        }
+    }
+panelEntrada.add(botonRecuperarInformacion);
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
