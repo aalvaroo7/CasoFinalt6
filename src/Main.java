@@ -1,9 +1,4 @@
-
 import Gestion_de_datos_dinamicos.VentanaPrincipal;
-import example.VentanaPrincipal;
-
-
-
 import javax.swing.SwingUtilities;
 
 public class Main {
