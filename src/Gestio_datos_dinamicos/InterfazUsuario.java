@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -21,12 +22,20 @@ public class InterfazUsuario extends JFrame {
     private JButton botonBuscar;
     private JButton botonFiltrar;
     private List<String> listaDatos;
+    private List<Integer> listaEnteros;
+    private List<String> listaCadenas;
 
     // Crear una instancia del modelo multidimensional ordenado
     private ModeloMultidimensionalOrdenado modeloOrdenado = new ModeloMultidimensionalOrdenado();
 
     // Crear una instancia del modelo multidimensional con transacciones
     private ModeloMultidimensionalConTransacciones modeloConTransacciones = new ModeloMultidimensionalConTransacciones();
+
+    // Crear una instancia del indexador recursivo
+    private IndexadorRecursivo indexador = new IndexadorRecursivo();
+
+    // Crear una instancia de la gestión de relaciones
+    private GestionRelaciones relaciones = new GestionRelaciones();
 
     public InterfazUsuario() {
         // Configurar el layout
@@ -42,6 +51,8 @@ public class InterfazUsuario extends JFrame {
         botonBuscar = new JButton("Buscar");
         botonFiltrar = new JButton("Filtrar");
         listaDatos = new ArrayList<>();
+        listaEnteros = new ArrayList<>();
+        listaCadenas = new ArrayList<>();
 
         // Agregar un ActionListener a cada botón
         botonAgregar.addActionListener(e -> {
@@ -79,28 +90,49 @@ public class InterfazUsuario extends JFrame {
         });
 
         botonOrdenar.addActionListener(e -> {
-            // Agregar pares de enteros al modelo ordenado
-            modeloOrdenado.agregarParejaEnteros(new ParejaOrdenada<>(1, 2));
-            modeloOrdenado.agregarParejaEnteros(new ParejaOrdenada<>(3, 4));
-            modeloOrdenado.agregarParejaEnteros(new ParejaOrdenada<>(5, 6));
+            String texto = campoTexto.getText();
+            try {
+                // Intentar convertir el texto a un entero
+                int numero = Integer.parseInt(texto);
 
-            // Imprimir las listas del modelo ordenado
-            modeloOrdenado.imprimirListas();
+                // Si la conversión es exitosa, agregar el número a la lista de enteros
+                listaEnteros.add(numero);
+
+                // Ordenar la lista de enteros de mayor a menor
+                listaEnteros.sort(Collections.reverseOrder());
+
+                // Limpiar el área de texto y mostrar la lista de enteros ordenada
+                areaTexto.setText("");
+                for (int i : listaEnteros) {
+                    areaTexto.append(i + "\n");
+                }
+            } catch (NumberFormatException ex) {
+                // Si la conversión falla, agregar el texto a la lista de cadenas
+                listaCadenas.add(texto);
+
+                // Ordenar la lista de cadenas en orden alfabético
+                Collections.sort(listaCadenas);
+
+                // Limpiar el área de texto y mostrar la lista de cadenas ordenada
+                areaTexto.setText("");
+                for (String s : listaCadenas) {
+                    areaTexto.append(s + "\n");
+                }
+            }
+
+            // Limpiar el campo de texto
+            campoTexto.setText("");
         });
 
         botonBuscar.addActionListener(e -> {
-            // Agregar transacciones al modelo
-            modeloConTransacciones.agregarTransaccion(new Transaccion(1, "Producto 1", 10, 100.0));
-            modeloConTransacciones.agregarTransaccion(new Transaccion(2, "Producto 2", 20, 200.0));
-            modeloConTransacciones.agregarTransaccion(new Transaccion(3, "Producto 3", 30, 300.0));
+            // Buscar el archivo con el nombre ingresado
+            String rutaArchivo = indexador.buscarArchivo(campoTexto.getText());
 
-            // Filtrar transacciones por cantidad
-            TreeSet<Transaccion> transaccionesFiltradas = modeloConTransacciones.filtrarTransaccionesPorCantidad(15);
+            // Mostrar la ruta del archivo en el área de texto
+            areaTexto.setText(rutaArchivo != null ? rutaArchivo : "Archivo no encontrado");
 
-            // Imprimir las transacciones filtradas
-            for (Transaccion transaccion : transaccionesFiltradas) {
-                areaTexto.append(transaccion.toString() + "\n");
-            }
+            // Limpiar el campo de texto
+            campoTexto.setText("");
         });
 
         botonFiltrar.addActionListener(e -> {
