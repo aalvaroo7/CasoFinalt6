@@ -1,5 +1,7 @@
 package Gestion_de_datos_dinamicos;
 
+import analisis_y_organizacion_informacion.ListaTransacciones;
+import analisis_y_organizacion_informacion.Transaccion;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -56,10 +58,7 @@ public class VentanaPrincipal extends JFrame {
                     campoFecha.setText("");
                     campoCliente.setText("");
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                            "Por favor, ingrese valores numéricos válidos para el ID y el monto.",
-                            "Error de entrada",
-                            JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, ingrese valores numéricos válidos para el ID y el monto.", "Error de entrada", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -88,16 +87,10 @@ public class VentanaPrincipal extends JFrame {
                         campoFecha.setText("");
                         campoCliente.setText("");
                     } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                                "Por favor, ingrese valores numéricos válidos para el ID y el monto.",
-                                "Error de entrada",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, ingrese valores numéricos válidos para el ID y el monto.", "Error de entrada", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                            "Por favor, seleccione una transacción.",
-                            "Seleccione una transacción",
-                            JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, seleccione una transacción.", "Seleccione una transacción", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -113,10 +106,7 @@ public class VentanaPrincipal extends JFrame {
                     listaTransacciones.eliminarTransaccion(indiceSeleccionado);
                     tablaTransacciones.updateUI();
                 } else {
-                    JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                            "Por favor, seleccione una transacción.",
-                            "Seleccione una transacción",
-                            JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, seleccione una transacción.", "Seleccione una transacción", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
@@ -149,10 +139,7 @@ public class VentanaPrincipal extends JFrame {
         botonFiltrarPorCliente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String cliente = JOptionPane.showInputDialog(VentanaPrincipal.this,
-                        "Ingrese el nombre del cliente:",
-                        "Filtrar por cliente",
-                        JOptionPane.QUESTION_MESSAGE);
+                String cliente = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el nombre del cliente:", "Filtrar por cliente", JOptionPane.QUESTION_MESSAGE);
                 if (cliente != null && !cliente.isEmpty()) {
                     List<Transaccion> filtradas = listaTransacciones.filtrarPorCliente(cliente);
                     tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
@@ -166,14 +153,8 @@ public class VentanaPrincipal extends JFrame {
         botonFiltrarPorRangoDeFechas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fechaInicial = JOptionPane.showInputDialog(VentanaPrincipal.this,
-                        "Ingrese la fecha inicial (yyyy-mm-dd):",
-                        "Filtrar por rango de fechas",
-                        JOptionPane.QUESTION_MESSAGE);
-                String fechaFinal = JOptionPane.showInputDialog(VentanaPrincipal.this,
-                        "Ingrese la fecha final (yyyy-mm-dd):",
-                        "Filtrar por rango de fechas",
-                        JOptionPane.QUESTION_MESSAGE);
+                String fechaInicial = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese la fecha inicial (yyyy-mm-dd):", "Filtrar por rango de fechas", JOptionPane.QUESTION_MESSAGE);
+                String fechaFinal = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese la fecha final (yyyy-mm-dd):", "Filtrar por rango de fechas", JOptionPane.QUESTION_MESSAGE);
                 if (fechaInicial != null && !fechaInicial.isEmpty() && fechaFinal != null && !fechaFinal.isEmpty()) {
                     List<Transaccion> filtradas = listaTransacciones.filtrarPorRangoDeFechas(fechaInicial, fechaFinal);
                     tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
@@ -187,24 +168,64 @@ public class VentanaPrincipal extends JFrame {
         botonFiltrarPorMontoMinimo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String montoMinimoStr = JOptionPane.showInputDialog(VentanaPrincipal.this,
-                        "Ingrese el monto mínimo:",
-                        "Filtrar por monto mínimo",
-                        JOptionPane.QUESTION_MESSAGE);
+                String montoMinimoStr = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el monto mínimo:", "Filtrar por monto mínimo", JOptionPane.QUESTION_MESSAGE);
                 if (montoMinimoStr != null && !montoMinimoStr.isEmpty()) {
                     try {
                         double montoMinimo = Double.parseDouble(montoMinimoStr);
                         List<Transaccion> filtradas = listaTransacciones.filtrarPorMontoMinimo(montoMinimo);
                         tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
                     } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                                "Por favor, ingrese un valor numérico válido para el monto mínimo.",
-                                "Error de entrada",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, ingrese un valor numérico válido para el monto mínimo.", "Error de entrada", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
         });
         panelEntrada.add(botonFiltrarPorMontoMinimo);
 
-        // Crear el botón de filtrar por
+        // Crear el botón de filtrar por monto máximo
+        JButton botonFiltrarPorMontoMaximo = new JButton("Filtrar por monto máximo");
+        botonFiltrarPorMontoMaximo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String montoMaximoStr = JOptionPane.showInputDialog(VentanaPrincipal.this, "Ingrese el monto máximo:", "Filtrar por monto máximo", JOptionPane.QUESTION_MESSAGE);
+                if (montoMaximoStr != null && !montoMaximoStr.isEmpty()) {
+                    try {
+                        double montoMaximo = Double.parseDouble(montoMaximoStr);
+                        List<Transaccion> filtradas = listaTransacciones.filtrarPorMontoMaximo(montoMaximo);
+                        tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(VentanaPrincipal.this, "Por favor, ingrese un valor numérico válido para el monto máximo.", "Error de entrada", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        panelEntrada.add(botonFiltrarPorMontoMaximo);
+
+        // Crear el botón de limpiar filtros
+        JButton botonLimpiarFiltros = new JButton("Limpiar filtros");
+        botonLimpiarFiltros.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablaTransacciones.setModel(new TransaccionesTableModel(listaTransacciones.getTransacciones()));
+            }
+        });
+        panelEntrada.add(botonLimpiarFiltros);
+
+        // Crear la tabla de transacciones
+        String[] columnas = {"ID", "Monto", "Fecha", "Cliente"};
+        tablaTransacciones = new JTable(new TransaccionesTableModel(listaTransacciones.getTransacciones()), columnas);
+
+        // Crear el panel de la tabla
+        JScrollPane scrollPane = new JScrollPane(tablaTransacciones);
+        JPanel panelTabla = new JPanel();
+        panelTabla.add(scrollPane);
+
+        // Agregar los paneles al marco
+        getContentPane().add(panelEntrada, BorderLayout.NORTH);
+        getContentPane().add(panelTabla, BorderLayout.CENTER);
+
+        // Mostrar la ventana
+        setVisible(true);
+    }
+}
+

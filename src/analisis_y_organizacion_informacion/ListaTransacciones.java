@@ -1,5 +1,6 @@
 package analisis_y_organizacion_informacion;
 
+import analisis_y_organizacion_informacion.Transaccion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,7 +44,7 @@ public class ListaTransacciones {
     public List<Transaccion> filtrarPorCliente(String cliente) {
         List<Transaccion> filtradas = new ArrayList<>();
         for (Transaccion transaccion : this.transacciones) {
-            if (transaccion.getCliente().equals(cliente)) {
+            if (transaccion.getCliente().equalsIgnoreCase(cliente)) {
                 filtradas.add(transaccion);
             }
         }
