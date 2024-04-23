@@ -1,3 +1,5 @@
+package Gestion_de_datos_dinamicos;
+
 import Gestion_de_datos_dinamicos.Pareja;
 import analisis_y_organizacion_informacion.Buscador;
 import analisis_y_organizacion_informacion.Ordenador;
