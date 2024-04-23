@@ -1,52 +1,64 @@
-package Gestion_de_datos_dinamicos;
+import analisis_y_organizacion_informacion.ListaTransacciones;
+import analisis_y_organizacion_informacion.Transaccion;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
+
 public class VentanaPrincipal extends JFrame {
-    private ListaDatos listaDatos;
-    private JTable tablaDatos;
-    private JTextField campoPrimerNumero;
-    private JTextField campoSegundoNumero;
+    private ListaTransacciones listaTransacciones;
+    private JTable tablaTransacciones;
+    private JTextField campoId;
+    private JTextField campoMonto;
+    private JTextField campoFecha;
+    private JTextField campoCliente;
 
     public VentanaPrincipal() {
-        super("Lista de Datos");
+        super("Lista de Transacciones");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(800, 600);
 
-        // Crear la lista de datos
-        listaDatos = new ListaDatos();
+        // Crear la lista de transacciones
+        listaTransacciones = new ListaTransacciones();
 
         // Crear el panel de entrada de datos
         JPanel panelEntrada = new JPanel();
-        panelEntrada.setLayout(new GridLayout(2, 2));
-        panelEntrada.add(new JLabel("Primer número:"));
-        campoPrimerNumero = new JTextField(5);
-        panelEntrada.add(campoPrimerNumero);
-        panelEntrada.add(new JLabel("Segundo número:"));
-        campoSegundoNumero = new JTextField(5);
-        panelEntrada.add(campoSegundoNumero);
+        panelEntrada.setLayout(new GridLayout(4, 2));
+        panelEntrada.add(new JLabel("ID:"));
+        campoId = new JTextField(5);
+        panelEntrada.add(campoId);
+        panelEntrada.add(new JLabel("Monto:"));
+        campoMonto = new JTextField(5);
+        panelEntrada.add(campoMonto);
+        panelEntrada.add(new JLabel("Fecha:"));
+        campoFecha = new JTextField(10);
+        panelEntrada.add(campoFecha);
+        panelEntrada.add(new JLabel("Cliente:"));
+        campoCliente = new JTextField(20);
+        panelEntrada.add(campoCliente);
 
-        // Crear el botón de agregar datos
-        JButton botonAgregar = new JButton("Agregar datos");
+        // Crear el botón de agregar transacción
+        JButton botonAgregar = new JButton("Agregar transacción");
         botonAgregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    int primerNumero = Integer.parseInt(campoPrimerNumero.getText());
-                    int segundoNumero = Integer.parseInt(campoSegundoNumero.getText());
-                    Pareja nuevaPareja = new Pareja(primerNumero, segundoNumero);
-                    listaDatos.agregarPareja(nuevaPareja);
-                    tablaDatos.updateUI();
-                    campoPrimerNumero.setText("");
-                    campoSegundoNumero.setText("");
+                    int id = Integer.parseInt(campoId.getText());
+                    double monto = Double.parseDouble(campoMonto.getText());
+                    String fecha = campoFecha.getText();
+                    String cliente = campoCliente.getText();
+                    Transaccion nuevaTransaccion = new Transaccion(id, monto, fecha, cliente);
+                    listaTransacciones.agregarTransaccion(nuevaTransaccion);
+                    tablaTransacciones.updateUI();
+                    campoId.setText("");
+                    campoMonto.setText("");
+                    campoFecha.setText("");
+                    campoCliente.setText("");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                            "Por favor, ingrese números válidos.",
+                            "Por favor, ingrese valores numéricos válidos para el ID y el monto.",
                             "Error de entrada",
                             JOptionPane.ERROR_MESSAGE);
                 }
@@ -54,129 +66,146 @@ public class VentanaPrincipal extends JFrame {
         });
         panelEntrada.add(botonAgregar);
 
-        // Crear el botón de modificar datos
-        JButton botonModificar = new JButton("Modificar datos");
+        // Crear el botón de modificar transacción
+        JButton botonModificar = new JButton("Modificar transacción");
         botonModificar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int indiceSeleccionado = tablaDatos.getSelectedRow();
+                int indiceSeleccionado = tablaTransacciones.getSelectedRow();
                 if (indiceSeleccionado >= 0) {
                     try {
-                        int primerNumero = Integer.parseInt(campoPrimerNumero.getText());
-                        int segundoNumero = Integer.parseInt(campoSegundoNumero.getText());
-                        Pareja parejaSeleccionada = listaDatos.getPareja(indiceSeleccionado);
-                        parejaSeleccionada.setPrimerNumero(primerNumero);
-                        parejaSeleccionada.setSegundoNumero(segundoNumero);
-                        tablaDatos.updateUI();
-                        campoPrimerNumero.setText("");
-                        campoSegundoNumero.setText("");
+                        int id = Integer.parseInt(campoId.getText());
+                        double monto = Double.parseDouble(campoMonto.getText());
+                        String fecha = campoFecha.getText();
+                        String cliente = campoCliente.getText();
+                        Transaccion transaccionSeleccionada = listaTransacciones.getTransaccion(indiceSeleccionado);
+                        transaccionSeleccionada.setId(id);
+                        transaccionSeleccionada.setMonto(monto);
+                        transaccionSeleccionada.setFecha(fecha);
+                        transaccionSeleccionada.setCliente(cliente);
+                        tablaTransacciones.updateUI();
+                        campoId.setText("");
+                        campoMonto.setText("");
+                        campoFecha.setText("");
+                        campoCliente.setText("");
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                                "Por favor, ingrese números válidos.",
+                                "Por favor, ingrese valores numéricos válidos para el ID y el monto.",
                                 "Error de entrada",
                                 JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                            "Por favor, seleccione una pareja de datos.",
-                            "Seleccione una pareja",
+                            "Por favor, seleccione una transacción.",
+                            "Seleccione una transacción",
                             JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
         panelEntrada.add(botonModificar);
 
-        // Crear el botón de eliminar datos
-        JButton botonEliminar = new JButton("Eliminar datos");
+        // Crear el botón de eliminar transacción
+        JButton botonEliminar = new JButton("Eliminar transacción");
         botonEliminar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int indiceSeleccionado = tablaDatos.getSelectedRow();
+                int indiceSeleccionado = tablaTransacciones.getSelectedRow();
                 if (indiceSeleccionado >= 0) {
-                    listaDatos.eliminarPareja(indiceSeleccionado);
-                    tablaDatos.updateUI();
+                    listaTransacciones.eliminarTransaccion(indiceSeleccionado);
+                    tablaTransacciones.updateUI();
                 } else {
                     JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                            "Por favor, seleccione una pareja de datos.",
-                            "Seleccione una pareja",
+                            "Por favor, seleccione una transacción.",
+                            "Seleccione una transacción",
                             JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
         panelEntrada.add(botonEliminar);
 
-        // Crear el botón de ordenar por primer número
-        JButton botonOrdenarPorPrimerNumero = new JButton("Ordenar por primer número");
-        botonOrdenarPorPrimerNumero.addActionListener(new ActionListener() {
+        // Crear el botón de ordenar por monto
+        JButton botonOrdenarPorMonto = new JButton("Ordenar por monto");
+        botonOrdenarPorMonto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listaDatos.ordenarPorPrimerNumero();
-                tablaDatos.updateUI();
+                listaTransacciones.ordenarPorMonto();
+                tablaTransacciones.updateUI();
             }
         });
-        panelEntrada.add(botonOrdenarPorPrimerNumero);
+        panelEntrada.add(botonOrdenarPorMonto);
 
-        // Crear el botón de ordenar por segundo número
-        JButton botonOrdenarPorSegundoNumero = new JButton("Ordenar por segundo número");
-        botonOrdenarPorSegundoNumero.addActionListener(new ActionListener() {
+        // Crear el botón de ordenar por fecha
+        JButton botonOrdenarPorFecha = new JButton("Ordenar por fecha");
+        botonOrdenarPorFecha.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listaDatos.ordenarPorSegundoNumero();
-                tablaDatos.updateUI();
+                listaTransacciones.ordenarPorFecha();
+                tablaTransacciones.updateUI();
             }
         });
-        panelEntrada.add(botonOrdenarPorSegundoNumero);
+        panelEntrada.add(botonOrdenarPorFecha);
 
-        // Crear el botón de buscar pareja
-        JButton botonBuscarPareja = new JButton("Buscar pareja");
-        botonBuscarPareja.addActionListener(new ActionListener() {
+        // Crear el botón de filtrar por cliente
+        JButton botonFiltrarPorCliente = new JButton("Filtrar por cliente");
+        botonFiltrarPorCliente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    int primerNumero = Integer.parseInt(campoPrimerNumero.getText());
-                    int segundoNumero = Integer.parseInt(campoSegundoNumero.getText());
-                    int indice = listaDatos.buscarPareja(primerNumero, segundoNumero);
-                    if (indice >= 0) {
-                        tablaDatos.setRowSelectionInterval(indice, indice);
-                    } else {
-                        JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                                "No se encontró la pareja de datos.",
-                                "Búsqueda fallida",
-                                JOptionPane.WARNING_MESSAGE);
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                            "Por favor, ingrese números válidos.",
-                            "Error de entrada",
-                            JOptionPane.ERROR_MESSAGE);
+                String cliente = JOptionPane.showInputDialog(VentanaPrincipal.this,
+                        "Ingrese el nombre del cliente:",
+                        "Filtrar por cliente",
+                        JOptionPane.QUESTION_MESSAGE);
+                if (cliente != null && !cliente.isEmpty()) {
+                    List<Transaccion> filtradas = listaTransacciones.filtrarPorCliente(cliente);
+                    tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
                 }
             }
         });
-        panelEntrada.add(botonBuscarPareja);
+        panelEntrada.add(botonFiltrarPorCliente);
 
-        // Crear el modelo de datos de la tabla
-        ListaDatosTableModel modeloTabla = new ListaDatosTableModel(listaDatos);
-
-        // Crear la tabla
-        tablaDatos = new JTable(modeloTabla);
-
-        // Crear el panel de la tabla
-        JScrollPane panelTabla = new JScrollPane(tablaDatos);
-
-        // Agregar los paneles al marco
-        getContentPane().add(panelEntrada, BorderLayout.NORTH);
-        getContentPane().add(panelTabla, BorderLayout.CENTER);
-
-        // Mostrar la ventana
-        setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
+        // Crear el botón de filtrar por rango de fechas
+        JButton botonFiltrarPorRangoDeFechas = new JButton("Filtrar por rango de fechas");
+        botonFiltrarPorRangoDeFechas.addActionListener(new ActionListener() {
             @Override
-            public void run() {
-                new VentanaPrincipal();
+            public void actionPerformed(ActionEvent e) {
+                String fechaInicial = JOptionPane.showInputDialog(VentanaPrincipal.this,
+                        "Ingrese la fecha inicial (yyyy-mm-dd):",
+                        "Filtrar por rango de fechas",
+                        JOptionPane.QUESTION_MESSAGE);
+                String fechaFinal = JOptionPane.showInputDialog(VentanaPrincipal.this,
+                        "Ingrese la fecha final (yyyy-mm-dd):",
+                        "Filtrar por rango de fechas",
+                        JOptionPane.QUESTION_MESSAGE);
+                if (fechaInicial != null && !fechaInicial.isEmpty() && fechaFinal != null && !fechaFinal.isEmpty()) {
+                    List<Transaccion> filtradas = listaTransacciones.filtrarPorRangoDeFechas(fechaInicial, fechaFinal);
+                    tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
+                }
             }
         });
-    }
-}
+        panelEntrada.add(botonFiltrarPorRangoDeFechas);
+
+        // Crear el botón de filtrar por monto mínimo
+        JButton botonFiltrarPorMontoMinimo = new JButton("Filtrar por monto mínimo");
+        botonFiltrarPorMontoMinimo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String montoMinimoStr = JOptionPane.showInputDialog(VentanaPrincipal.this,
+                        "Ingrese el monto mínimo:",
+                        "Filtrar por monto mínimo",
+                        JOptionPane.QUESTION_MESSAGE);
+                if (montoMinimoStr != null && !montoMinimoStr.isEmpty()) {
+                    try {
+                        double montoMinimo = Double.parseDouble(montoMinimoStr);
+                        List<Transaccion> filtradas = listaTransacciones.filtrarPorMontoMinimo(montoMinimo);
+                        tablaTransacciones.setModel(new TransaccionesTableModel(filtradas));
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                                "Por favor, ingrese un valor numérico válido para el monto mínimo.",
+                                "Error de entrada",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        panelEntrada.add(botonFiltrarPorMontoMinimo);
+
+        // Crear el botón de filtrar por
