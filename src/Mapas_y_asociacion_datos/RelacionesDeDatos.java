@@ -3,11 +3,11 @@ package Mapas_y_asociacion_datos;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DataRelations {
+public class RelacionesDeDatos {
     private Map<Integer, Character> numberToLetterMap;
     private Map<Integer, String> numberToTextualRepresentationMap;
 
-    public DataRelations() {
+    public RelacionesDeDatos() {
         numberToLetterMap = new HashMap<>();
         numberToTextualRepresentationMap = new HashMap<>();
     }
