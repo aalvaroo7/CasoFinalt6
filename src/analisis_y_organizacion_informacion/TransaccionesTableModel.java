@@ -7,6 +7,7 @@ import java.util.List;
 
 public class TransaccionesTableModel extends AbstractTableModel {
     private List<Transaccion> transacciones;
+    private String[] columnNames = {"ID", "Monto", "Fecha", "Cliente"};
 
     public TransaccionesTableModel(List<Transaccion> transacciones) {
         this.transacciones = transacciones;
@@ -19,7 +20,12 @@ public class TransaccionesTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 4; // Assuming you have 4 columns: ID, Monto, Fecha, Cliente
+        return columnNames.length;
+    }
+
+    @Override
+    public String getColumnName(int col) {
+        return columnNames[col];
     }
 
     @Override

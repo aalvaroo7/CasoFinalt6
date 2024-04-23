@@ -2,6 +2,8 @@ package Gestion_de_datos_dinamicos;
 
 import analisis_y_organizacion_informacion.ListaTransacciones;
 import analisis_y_organizacion_informacion.Transaccion;
+import analisis_y_organizacion_informacion.TransaccionesTableModel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
