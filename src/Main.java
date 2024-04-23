@@ -7,6 +7,7 @@ public class Main {
             @Override
             public void run() {
                 VentanaPrincipal ventana = new VentanaPrincipal();
+                ventana.setVisible(true);
             }
         });
     }

@@ -221,35 +221,25 @@ public class VentanaPrincipal extends JFrame {
         JPanel panelTabla = new JPanel();
         panelTabla.add(scrollPane);
 
-        // Agregar los paneles al marco
-        getContentPane().add(panelEntrada, BorderLayout.NORTH);
-        getContentPane().add(panelTabla, BorderLayout.CENTER);
+        // Crear el contenedor principal y agregar los componentes
+        JPanel contenedorPrincipal = new JPanel();
+        contenedorPrincipal.setLayout(new BorderLayout());
+        contenedorPrincipal.add(panelEntrada, BorderLayout.NORTH);
+        contenedorPrincipal.add(panelTabla, BorderLayout.CENTER);
+
+        // Agregar el contenedor principal a la ventana
+        getContentPane().add(contenedorPrincipal);
 
         // Mostrar la ventana
         setVisible(true);
     }
 
-
-    // Crear el contenedor principal y agregar los componentes
-    JPanel contenedorPrincipal = new JPanel();
-        contenedorPrincipal.setLayout(new BorderLayout());
-        contenedorPrincipal.add(panelEntrada, BorderLayout.NORTH);
-        contenedorPrincipal.add(new JScrollPane(tablaTransacciones), BorderLayout.CENTER);
-
-    // Agregar el contenedor principal a la ventana
-    getContentPane().add(contenedorPrincipal);
-
-    // Mostrar la ventana
-    setVisible(true);
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new VentanaPrincipal();
+            }
+        });
+    }
 }
-
-public static void main(String[] args) {
-    SwingUtilities.invokeLater(new Runnable() {
-        @Override
-        public void run() {
-            new VentanaPrincipal();
-        }
-    });
-}
-
-
